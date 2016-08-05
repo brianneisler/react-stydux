@@ -139,21 +139,20 @@ export default function _styles(mapStateToStyles, mergeStyles, options = {}) {
       }
 
       isSubscribed() {
-        return this.subscribed
+        return typeof this.unsubscribe === 'function'
       }
 
       trySubscribe() {
-        if (shouldSubscribe && !this.subscribed) {
-          this.subscribed = true
-          this.stydux.onChange(this.handleChange)
+        if (shouldSubscribe && !this.unsubscribe) {
+          this.unsubscribe = this.store.subscribe(this.handleChange.bind(this))
           this.handleChange()
         }
       }
 
       tryUnsubscribe() {
-        if (this.subscribed) {
-          this.stydux.offChange(this.handleChange)
-          this.subscribed = false
+        if (this.unsubscribe) {
+          this.unsubscribe()
+          this.unsubscribe = null
         }
       }
 
@@ -183,7 +182,7 @@ export default function _styles(mapStateToStyles, mergeStyles, options = {}) {
       }
 
       handleChange() {
-        if (!this.subscribed) {
+        if (!this.unsubscribe) {
           return
         }
 
