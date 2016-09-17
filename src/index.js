@@ -1,1 +1,2 @@
-export { default as styles } from './styles'
+export { default as stydux } from './stydux'
+export { default as StyduxProvider } from './StyduxProvider'
